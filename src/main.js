@@ -1,3 +1,6 @@
+import * as THREE from 'three';
+import './style.css';
+
 const canvas = document.getElementById('scene');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xb30000);
@@ -63,7 +66,13 @@ character.add(leftLeg, rightLeg);
 
 const sword = new THREE.Mesh(
   new THREE.BoxGeometry(0.25, 0.25, 4.5),
-  new THREE.MeshStandardMaterial({ color: 0x9bd7ff, emissive: 0x1bb4ff, emissiveIntensity: 0.6, metalness: 0.7, roughness: 0.1 })
+  new THREE.MeshStandardMaterial({
+    color: 0x9bd7ff,
+    emissive: 0x1bb4ff,
+    emissiveIntensity: 0.6,
+    metalness: 0.7,
+    roughness: 0.1,
+  })
 );
 sword.position.set(-0.2, 1.4, -2.2);
 sword.rotation.x = Math.PI * 0.1;
@@ -101,7 +110,13 @@ function updateSwordSparks(delta) {
 const worms = [];
 function createWorm() {
   const group = new THREE.Group();
-  const segmentMaterial = new THREE.MeshStandardMaterial({ color: 0xffd35c, emissive: 0xffb347, emissiveIntensity: 0.6, roughness: 0.3, metalness: 0.2 });
+  const segmentMaterial = new THREE.MeshStandardMaterial({
+    color: 0xffd35c,
+    emissive: 0xffb347,
+    emissiveIntensity: 0.6,
+    roughness: 0.3,
+    metalness: 0.2,
+  });
   const count = 8;
   for (let i = 0; i < count; i++) {
     const segment = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.6, 1.4), segmentMaterial);
@@ -120,18 +135,28 @@ function createWorm() {
   worms.push(group);
 }
 
-for (let i = 0; i < 7; i++) {
+for (let i = 0; i < 10; i++) {
   createWorm();
 }
 
-const wormSparkGeo = new THREE.SphereGeometry(0.03, 4, 2);
-const wormSparkMaterial = new THREE.MeshBasicMaterial({ color: 0x33f7ff, transparent: true, opacity: 0.8 });
+const wormSparkGeo = new THREE.SphereGeometry(0.1, 6, 6);
+const wormSparkMaterial = new THREE.MeshStandardMaterial({
+  color: 0x1ef2d5,
+  emissive: 0x1ef2d5,
+  emissiveIntensity: 1.4,
+  metalness: 0.4,
+  roughness: 0.15,
+  transparent: true,
+});
 const wormSparks = [];
 
 function addWormSparks(position) {
-  for (let i = 0; i < 4; i++) {
+  const count = 6 + Math.floor(Math.random() * 6);
+  for (let i = 0; i < count; i++) {
     const spark = new THREE.Mesh(wormSparkGeo, wormSparkMaterial.clone());
-    spark.position.copy(position).add(new THREE.Vector3((Math.random() - 0.5) * 1.2, Math.random() * 1.2, (Math.random() - 0.5) * 1.2));
+    spark.position.copy(position).add(
+      new THREE.Vector3((Math.random() - 0.5) * 1.2, Math.random() * 1.2, (Math.random() - 0.5) * 1.2)
+    );
     spark.userData.life = 0.5 + Math.random() * 0.6;
     spark.userData.velocity = new THREE.Vector3((Math.random() - 0.5) * 0.4, Math.random() * 1, (Math.random() - 0.5) * 0.4);
     scene.add(spark);
@@ -153,8 +178,8 @@ function updateWormSparks(delta) {
 }
 
 const keys = new Set();
-let velocity = new THREE.Vector3();
-let direction = new THREE.Vector3(0, 0, -1);
+const velocity = new THREE.Vector3();
+const direction = new THREE.Vector3(0, 0, -1);
 let runPhase = 0;
 
 const baseCameraAngle = -Math.PI * 0.9;
@@ -223,11 +248,7 @@ function updateWorms(delta, elapsed) {
 function updateCamera() {
   const yaw = baseCameraAngle + cameraYawOffset;
   const radius = 22;
-  const eye = new THREE.Vector3(
-    Math.cos(yaw) * radius,
-    14,
-    Math.sin(yaw) * radius
-  );
+  const eye = new THREE.Vector3(Math.cos(yaw) * radius, 14, Math.sin(yaw) * radius);
   camera.position.copy(character.position.clone().add(eye));
   camera.lookAt(character.position.x, character.position.y + 2, character.position.z);
 }
