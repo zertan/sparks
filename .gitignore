@@ -3,3 +3,22 @@ node_modules
 .vscode
 .idea
 dist
+# Unity artifacts
+[Ll]ibrary/
+[Tt]emp/
+[Bb]uilds/
+[Pp]ackages/
+UserSettings/
+*.csproj
+*.sln
+*.unityproj
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.idea/
+*.vs/
